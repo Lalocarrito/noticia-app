@@ -1,15 +1,13 @@
-
 import React from 'react';
-import NoticiaForm from './components/NoticiaForm';
 import NoticiaList from './components/NoticiaList';
+import { ThemeProvider } from './context/ThemeContext';
 
-const App = () => {
+function App() {
   return (
-    <div>
-      <NoticiaForm />
+    <ThemeProvider>
       <NoticiaList />
-    </div>
+    </ThemeProvider>
   );
-};
+}
 
 export default App;

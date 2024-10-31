@@ -7,7 +7,10 @@ div {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
+html, body, #root {
+  height: 100%;
+  background-color: var(--background-color);
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',

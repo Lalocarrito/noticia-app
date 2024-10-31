@@ -1,12 +1,14 @@
-// src/components/NoticiaForm.js
 import React, { useState } from 'react';
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useTheme } from '../context/ThemeContext';
 
-const NoticiaForm = () => {
+const NoticiaForm = ({ onNoticiaAdded }) => {
+  const { isDarkMode } = useTheme();
   const [titulo, setTitulo] = useState('');
   const [contenido, setContenido] = useState('');
   const [grupo, setGrupo] = useState('');
+  const [noticiaAgregada, setNoticiaAgregada] = useState(false);
 
   const publicarNoticia = async (e) => {
     e.preventDefault();
@@ -20,43 +22,50 @@ const NoticiaForm = () => {
       setTitulo('');
       setContenido('');
       setGrupo('');
-      alert('Noticia publicada con éxito');
+      setNoticiaAgregada(true);
+      onNoticiaAdded();
+      setTimeout(() => setNoticiaAgregada(false), 3000); // Mensaje desaparece después de 3 segundos
     } catch (error) {
       console.error('Error al publicar noticia: ', error);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4"> 
-    <form onSubmit={publicarNoticia} className="bg-white p-6 rounded-lg shadow-md mb-4">
-    <input
-      className="w-full p-2 mb-4 border border-gray-300 rounded"
-      type="text"
-      placeholder="Título"
-      value={titulo}
-      onChange={(e) => setTitulo(e.target.value)}
-      required
-    />
-    <textarea
-      className="w-full p-2 mb-4 border border-gray-300 rounded"
-      placeholder="Contenido"
-      value={contenido}
-      onChange={(e) => setContenido(e.target.value)}
-      required
-    />
-    <input
-      className="w-full p-2 mb-4 border border-gray-300 rounded"
-      type="text"
-      placeholder="Grupo"
-      value={grupo}
-      onChange={(e) => setGrupo(e.target.value)}
-      required
-    />
-    <button className="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600" type="submit">
-      Publicar Noticia
-    </button>
-  </form>
-  </div>
+    <div className={`max-w-lg mx-auto p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md`}>
+      <form onSubmit={publicarNoticia} className="p-6">
+        <input
+          className={`w-full p-2 mb-4 rounded ${isDarkMode ? 'bg-gray-700 text-white' : 'border border-gray-300'}`}
+          type="text"
+          placeholder="Título"
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
+          required
+        />
+        <textarea
+          className={`w-full p-2 mb-4 rounded ${isDarkMode ? 'bg-gray-700 text-white' : 'border border-gray-300'}`}
+          placeholder="Contenido"
+          value={contenido}
+          onChange={(e) => setContenido(e.target.value)}
+          required
+        />
+        <input
+          className={`w-full p-2 mb-4 rounded ${isDarkMode ? 'bg-gray-700 text-white' : 'border border-gray-300'}`}
+          type="text"
+          placeholder="Grupo"
+          value={grupo}
+          onChange={(e) => setGrupo(e.target.value)}
+          required
+        />
+        <button className={`w-full py-2 px-4 rounded ${isDarkMode ? 'bg-green-500 text-black' : 'bg-green-500 text-white'}`}>
+          Publicar Noticia
+        </button>
+        {noticiaAgregada && (
+          <p className={`text-center mt-4 ${isDarkMode ? 'text-green-400' : 'text-green-600'}`}>
+            Noticia publicada con éxito
+          </p>
+        )}
+      </form>
+    </div>
   );
 };
 
