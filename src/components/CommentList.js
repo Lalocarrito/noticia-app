@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { db } from '../firebase';
 import { collection, onSnapshot } from 'firebase/firestore';
+import { useTheme } from '../context/ThemeContext';
+
 
 const CommentList = ({ noticiaId }) => {
   const [comentarios, setComentarios] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { isDarkMode } = useTheme();
 
   useEffect(() => {
     const comentariosCollection = collection(db, `noticias/${noticiaId}/comentarios`);
     const unsubscribe = onSnapshot(comentariosCollection, (snapshot) => {
       const comentarioList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setComentarios(comentarioList);
-      setLoading(false); // Cambia el estado de carga cuando se reciban los datos
+      setLoading(false); 
     });
 
-    return () => unsubscribe(); // Limpia la suscripción al desmontar el componente
+    return () => unsubscribe(); 
   }, [noticiaId]);
 
   return (
@@ -23,10 +26,10 @@ const CommentList = ({ noticiaId }) => {
         <p>Cargando comentarios...</p>
       ) : (
         comentarios.map((comentario) => (
-          <div key={comentario.id} className="bg-gray-200 p-2 rounded mb-2">
+          <div key={comentario.id} className={`mb-4 py-2 px-4 rounded ${isDarkMode ? 'bg-gray-600 text-white' : 'bg-gray-300 text-black'}`}>
             <strong>{comentario.usuario}</strong>
             <p>{comentario.texto}</p>
-            <p className="text-gray-500 text-sm">
+            <p className={`text-sm ${isDarkMode ? ' text-white' : ' text-black'}`}>
               {comentario.fecha ? new Date(comentario.fecha.seconds * 1000).toLocaleString() : ''}
             </p>
           </div>

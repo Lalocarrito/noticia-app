@@ -39,7 +39,7 @@ const NoticiaList = () => {
           <div key={noticia.id} className={`p-4 rounded-lg shadow-md mb-4 w-full mx-1 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
             <h3 className="text-xl font-semibold">{noticia.titulo}</h3>
             <p className="mb-2">{noticia.contenido}</p>
-            <p className="text-gray-600 pb-4"><strong>Grupo:</strong> {noticia.grupo}</p>
+            <p className={`pb-4 ${isDarkMode ? 'text-white' : 'text-black'}`}><strong>Grupo:</strong> {noticia.grupo}</p>
             <CommentForm noticiaId={noticia.id} onCommentAdded={() => handleCommentAdded(noticia.id)} />
             <CommentList noticiaId={noticia.id} />
           </div>
